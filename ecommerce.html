@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Comfort Learning</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10vh;
+            background-color: #ececec;
+            padding: 0 2em;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+        }
+
+        .menubar {
+            width: 45%;
+        }
+
+        .list {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .list-items a {
+            color: black;
+            font-family: sans-serif;
+            font-size: 0.9em;
+            transition: 0.4s;
+        }
+
+        .list-items a:hover {
+            color: #f09d51;
+        }
+
+        .cart {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart .number-of-items {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -12px;
+            right: -18px;
+            width: 20px;
+            height: 20px;
+            background-color: #f09d51;
+            border-radius: 50%;
+            color: white;
+            font-size: 0.8em;
+        }
+
+        /* Banner */
+        .banner {
+            background-color: #f5f5f5;
+            height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #333;
+            text-align: center;
+            padding: 2em;
+        }
+
+        .banner h1 {
+            font-size: 3em;
+        }
+
+        .banner a {
+            border: 2px solid #f09d51;
+            background-color: #f09d51;
+            color: white;
+            font-size: 1em;
+            padding: 0.6em 1.5em;
+            margin-top: 1.5em;
+            border-radius: 1.2em;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .banner a:hover {
+            background-color: transparent;
+            color: black;
+        }
+
+        /* Sections */
+        .section-container {
+            padding: 4em 2em;
+        }
+        
+        .section2 .title, .about-us-section .title {
+            text-align: center;
+            padding-bottom: 2em;
+        }
+
+        .section2 .product {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+        }
+        
+        .about-us-section p {
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .product-item {
+            padding: 1em;
+            background-color: #e0e0e0;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-item .product-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-item h3 {
+            margin: 10px 0;
+        }
+
+        .product-item h4 {
+            margin-bottom: 10px;
+        }
+
+        .product-item button {
+            border: 2px solid #f09d51;
+            background-color: #f09d51;
+            color: white;
+            font-size: 0.8em;
+            padding: 0.6em 1.5em;
+            margin-top: 0.5em;
+            border-radius: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .product-item button:disabled {
+            background-color: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .product-item button:hover:not(:disabled) {
+            background-color: transparent;
+            color: black;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            max-width: 100%;
+            height: 100vh;
+            background: #ececec;
+            z-index: 100;
+            overflow-y: scroll;
+            padding: 2em;
+            transform: translate(100%);
+            transition: 0.3s linear;
+        }
+
+        .cart-sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .cart-sidebar .cart {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar .close-cart,
+        .menu-sidebar .close-menu,
+        .modal .close-modal {
+            position: absolute;
+            right: 12px;
+            top: 4px;
+            font-size: 1.4em;
+            cursor: pointer;
+        }
+        
+        .cart-content {
+            margin-top: 1em;
+        }
+
+        .cart-content .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1em;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 1em;
+            gap: 1em;
+        }
+
+        .cart-content .cart-item .cart-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .cart-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .cart-details h4,
+        .cart-details h5 {
+            margin: 0;
+            font-size: 1em;
+        }
+        
+        .cart-details .remove-item {
+            cursor: pointer;
+            color: red;
+            font-size: 0.8em;
+        }
+        
+        .cart-quantity-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .cart-quantity-controls i {
+            cursor: pointer;
+        }
+        
+        .total-sum {
+            text-align: center;
+            margin-top: 2em;
+        }
+
+        .total-sum h1 {
+            font-size: 1.5em;
+        }
+
+        .cart-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            margin-top: 1em;
+        }
+        
+        .cart-actions .btn {
+            background-color: #f09d51;
+            color: white;
+            padding: 0.8em 2em;
+            border: none;
+            border-radius: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .cart-actions .btn:hover {
+            background-color: transparent;
+            color: black;
+            border: 2px solid #f09d51;
+        }
+        
+        /* Mobile Menu Sidebar */
+        .menu-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #ececec;
+            z-index: 101;
+            overflow-y: hidden;
+            transform: translateX(-100%);
+            transition: 0.3s linear;
+            padding: 2em;
+        }
+        
+        .menu-list {
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        /* Overlay & Custom Modal */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .overlay.show {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 102;
+            display: none;
+        }
+        
+        .modal h2 {
+            margin-bottom: 1em;
+        }
+        
+        /* Mobile */
+        .burger {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .menubar {
+                display: none;
+            }
+            .burger {
+                display: block;
+                cursor: pointer;
+            }
+            .burger div {
+                width: 25px;
+                height: 3px;
+                background-color: black;
+                margin: 5px;
+            }
+            .banner h1 {
+                font-size: 2em;
+            }
+            .banner a {
+                font-size: 0.6em;
+                padding: 1em 2em;
+            }
+            .section-container {
+                padding: 2em 1em;
+            }
+            .section2 .product {
+                grid-template-columns: 1fr;
+            }
+            .cart-sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="burger">
+            <div class="layer1"></div>
+            <div class="layer2"></div>
+            <div class="layer3"></div>
+        </div>
+        <div class="logo">
+            <span class="logo-text"><i class="fa fa-book" style="margin-right: 0.1em;"></i>Comfort
+            <span style="color: #f09d51; font-size: 1.1em;">Learning</span></span>
+        </div>
+        <div class="menubar">
+            <ul class="list">
+                <li class="list-items"><a href="#">HOME</a></li>
+                <li class="list-items"><a href="#courses">COURSES</a></li>
+                <li class="list-items"><a href="#courses">PRICINGS</a></li>
+                <li class="list-items"><a href="#about-us">ABOUT US</a></li>
+            </ul>
+        </div>
+        <div class="cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="number-of-items">0</span>
+        </div>
+    </nav>
+    <section class="banner">
+        <h1>Find Your Favourite Course here!</h1>
+        <a href="#courses">SHOP NOW</a>
+    </section>
+    
+    <!-- Courses Section -->
+    <section class="section-container section2" id="courses">
+        <div class="title">
+            <h1>COURSES WE OFFER</h1>
+        </div>
+        <div class="product"></div>
+    </section>
+    
+    <!-- About Us Section -->
+    <section class="section-container about-us-section" id="about-us">
+        <div class="title">
+            <h1>ABOUT US</h1>
+        </div>
+        <p>Comfort Learning is dedicated to providing high-quality, accessible education to students and professionals worldwide. Our mission is to make learning a comfortable and engaging experience, free from the traditional constraints of physical classrooms. We offer a wide range of courses in technology, business, and creative fields, taught by expert instructors. Our flexible and self-paced learning model allows you to study whenever and wherever you want, fitting education seamlessly into your life. With a focus on practical skills and real-world applications, we empower our learners to achieve their personal and career goals. Join our community and discover a new way to learn!</p>
+    </section>
+    
+    <div class="cart-sidebar">
+        <div class="cart">
+            <span class="close-cart">
+                <i class="fa fa-times"></i>
+            </span>
+            <h2>Your Cart</h2>
+            <div class="cart-content"></div>
+        </div>
+        <div class="total-sum">
+            <h1>Your Total: $ <span class="total-amount">0</span></h1>
+        </div>
+        <div class="cart-actions">
+            <button class="btn proceed-btn">Proceed</button>
+            <button class="btn clear-cart-btn">Clear Cart</button>
+        </div>
+    </div>
+    
+    <div class="menu-sidebar">
+        <div class="close-menu">
+            <i class="fa fa-times"></i>
+        </div>
+        <div class="menu">
+            <ul class="menu-list">
+                <li class="menu-list-items"><a href="#">HOME</a></li>
+                <li class="menu-list-items"><a href="#courses">COURSES</a></li>
+                <li class="menu-list-items"><a href="#courses">PRICINGS</a></li>
+                <li class="menu-list-items"><a href="#about-us">ABOUT US</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- This overlay handles clicks outside of sidebars and modals -->
+    <div class="overlay"></div>
+
+    <!-- Custom Modal for Alerts -->
+    <div class="modal" id="success-modal">
+        <span class="close-modal">&times;</span>
+        <h2>Courses are yours successfully!</h2>
+    </div>
+
+    <!-- New Modal for Empty Cart -->
+    <div class="modal" id="empty-cart-modal">
+        <span class="close-modal">&times;</span>
+        <h2>Please select at least one course.</h2>
+    </div>
+
+    <script>
+        const productsData = {
+            "items": [
+                {
+                    "sys": { "id": "1" },
+                    "fields": {
+                        "title": "Python Programming MasterCourse",
+                        "price": 123.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/F0F4C3/212121?text=Python" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "2" },
+                    "fields": {
+                        "title": "C++ Master Course",
+                        "price": 149.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/BBDEFB/212121?text=C%2B%2B" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "3" },
+                    "fields": {
+                        "title": "Web Development for Beginners",
+                        "price": 99.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/E0F2F1/212121?text=Web+Dev" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "4" },
+                    "fields": {
+                        "title": "Java Programming Master Course",
+                        "price": 179.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/F8BBD0/212121?text=Java" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "5" },
+                    "fields": {
+                        "title": "Digital Marketing",
+                        "price": 100.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/DCEDC8/212121?text=Marketing" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "6" },
+                    "fields": {
+                        "title": "Advanced Web Development",
+                        "price": 223.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/B2EBF2/212121?text=Advanced+Web+Dev" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "7" },
+                    "fields": {
+                        "title": "DSA",
+                        "price": 199.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/D1C4E9/212121?text=DSA" } } }
+                    }
+                },
+                {
+                    "sys": { "id": "8" },
+                    "fields": {
+                        "title": "Data Science",
+                        "price": 209.99,
+                        "image": { "fields": { "file": { "url": "https://placehold.co/400x300/FFCCBC/212121?text=Data+Science" } } }
+                    }
+                }
+            ]
+        };
+
+        const cart = document.querySelector("nav .cart");
+        const cartSideBar = document.querySelector(".cart-sidebar");
+        const closeCart = document.querySelector(".close-cart");
+        const burger = document.querySelector(".burger");
+        const menuSidebar = document.querySelector(".menu-sidebar");
+        const closeMenu = document.querySelector(".close-menu");
+        const cartItemsTotal = document.querySelector(".number-of-items");
+        const cartPriceTotal = document.querySelector(".total-amount");
+        const clearBtn = document.querySelector(".clear-cart-btn");
+        const proceedBtn = document.querySelector(".proceed-btn");
+        const cartContent = document.querySelector(".cart-content");
+        const productContainer = document.querySelector(".product");
+        const overlay = document.querySelector(".overlay");
+        const successModal = document.querySelector("#success-modal");
+        const emptyCartModal = document.querySelector("#empty-cart-modal");
+        const closeModals = document.querySelectorAll(".close-modal");
+        const menuLinks = document.querySelectorAll(".menu-list a");
+
+
+        let Cart = [];
+        let buttonsDOM = [];
+
+        // Event Listeners for UI
+        cart.addEventListener("click", () => {
+            cartSideBar.style.transform = "translate(0%)";
+            overlay.classList.add("show");
+        });
+        
+        closeCart.addEventListener("click", () => {
+            cartSideBar.style.transform = "translate(100%)";
+            overlay.classList.remove("show");
+        });
+
+        burger.addEventListener("click", () => {
+            menuSidebar.style.transform = "translate(0%)";
+            overlay.classList.add("show");
+        });
+
+        closeMenu.addEventListener("click", () => {
+            menuSidebar.style.transform = "translate(-100%)";
+            overlay.classList.remove("show");
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                menuSidebar.style.transform = "translate(-100%)";
+                overlay.classList.remove("show");
+            });
+        });
+        
+        // Hide sidebar and modal if overlay is clicked
+        overlay.addEventListener("click", () => {
+            cartSideBar.style.transform = "translate(100%)";
+            menuSidebar.style.transform = "translate(-100%)";
+            successModal.style.display = "none";
+            emptyCartModal.style.display = "none";
+            overlay.classList.remove("show");
+        });
+
+        // Cart Actions
+        proceedBtn.addEventListener("click", () => {
+            // Check if cart is empty
+            if (Cart.length === 0) {
+                emptyCartModal.style.display = "block";
+                overlay.classList.add("show");
+            } else {
+                // Display custom modal instead of alert
+                successModal.style.display = "block";
+                overlay.classList.add("show");
+                
+                // Clear the cart after "purchase"
+                clearCart();
+            }
+        });
+
+        // Event listener to close either modal
+        closeModals.forEach(closeBtn => {
+            closeBtn.addEventListener("click", () => {
+                successModal.style.display = "none";
+                emptyCartModal.style.display = "none";
+                overlay.classList.remove("show");
+            });
+        });
+
+        clearBtn.addEventListener("click", () => {
+            clearCart();
+        });
+
+        class Product {
+            async getProducts() {
+                try {
+                    return productsData.items;
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        }
+
+        class UI {
+            displayProducts(products) {
+                let result = "";
+                products.forEach(({ sys, fields }) => {
+                    const id = sys.id;
+                    const { title, price, image } = fields;
+                    const url = image.fields.file.url;
+                    result += `
+                        <div class="product-item">
+                            <img src="${url}" class="product-img" alt="product">
+                            <h3>${title}</h3>
+                            <h4>$${price}</h4>
+                            <button class="add-to-cart-btn" data-id="${id}">Add to Cart</button>
+                        </div>
+                    `;
+                });
+                productContainer.innerHTML = result;
+            }
+
+            getButtons() {
+                const buttons = [...document.querySelectorAll(".add-to-cart-btn")];
+                buttonsDOM = buttons;
+                buttons.forEach((button) => {
+                    let id = button.dataset.id;
+                    let inCart = Cart.find((item) => item.sys.id === id);
+                    if (inCart) {
+                        button.innerText = "In Cart";
+                        button.disabled = true;
+                    }
+                    button.addEventListener("click", (event) => {
+                        event.target.innerText = "In Cart";
+                        event.target.disabled = true;
+
+                        let cartItem = { ...Storage.getStorageProducts(id), amount: 1 };
+                        Cart = [...Cart, cartItem];
+                        Storage.saveCart(Cart);
+                        this.setCartValues(Cart);
+                        this.addCartItem(cartItem);
+                    });
+                });
+            }
+
+            setCartValues(cart) {
+                let tempTotal = 0;
+                let itemsTotal = 0;
+                cart.forEach((item) => {
+                    tempTotal += item.fields.price * item.amount;
+                    itemsTotal += item.amount;
+                });
+                cartPriceTotal.innerText = tempTotal.toFixed(2);
+                cartItemsTotal.innerText = itemsTotal;
+            }
+
+            addCartItem(item) {
+                const div = document.createElement("div");
+                div.classList.add("cart-item");
+                div.innerHTML = `
+                    <img src="${item.fields.image.fields.file.url}" alt="product" class="cart-img">
+                    <div class="cart-details">
+                        <h4>${item.fields.title}</h4>
+                        <h5>$${item.fields.price}</h5>
+                        <span class="remove-item" data-id="${item.sys.id}">Remove</span>
+                    </div>
+                    <div class="cart-quantity-controls">
+                        <i class="fa fa-chevron-up" data-id="${item.sys.id}"></i>
+                        <p class="item-amount">${item.amount}</p>
+                        <i class="fa fa-chevron-down" data-id="${item.sys.id}"></i>
+                    </div>
+                `;
+                cartContent.appendChild(div);
+            }
+
+            setupApp() {
+                Cart = Storage.getCart();
+                this.setCartValues(Cart);
+                this.populateCart(Cart);
+                this.cartLogic();
+            }
+
+            cartLogic() {
+                cartContent.addEventListener("click", (event) => {
+                    const target = event.target;
+                    const isRemoveBtn = target.classList.contains("remove-item");
+                    const isIncreaseBtn = target.classList.contains("fa-chevron-up");
+                    const isDecreaseBtn = target.classList.contains("fa-chevron-down");
+
+                    if (isRemoveBtn) {
+                        let id = target.dataset.id;
+                        this.removeItem(id);
+                        cartContent.removeChild(target.parentElement.parentElement);
+                    } else if (isIncreaseBtn) {
+                        let id = target.dataset.id;
+                        let tempItem = Cart.find((item) => item.sys.id === id);
+                        tempItem.amount++;
+                        Storage.saveCart(Cart);
+                        this.setCartValues(Cart);
+                        target.nextElementSibling.innerText = tempItem.amount;
+                    } else if (isDecreaseBtn) {
+                        let id = target.dataset.id;
+                        let tempItem = Cart.find((item) => item.sys.id === id);
+                        tempItem.amount--;
+                        if (tempItem.amount > 0) {
+                            Storage.saveCart(Cart);
+                            this.setCartValues(Cart);
+                            target.previousElementSibling.innerText = tempItem.amount;
+                        } else {
+                            this.removeItem(id);
+                            cartContent.removeChild(target.parentElement.parentElement);
+                        }
+                    }
+                });
+            }
+            
+            populateCart(cart) {
+                cart.forEach((item) => this.addCartItem(item));
+            }
+
+            clearCart() {
+                let cartItemsIds = Cart.map((item) => item.sys.id);
+                cartItemsIds.forEach((id) => this.removeItem(id));
+                while (cartContent.firstChild) {
+                    cartContent.removeChild(cartContent.firstChild);
+                }
+            }
+
+            removeItem(id) {
+                Cart = Cart.filter((item) => item.sys.id !== id);
+                this.setCartValues(Cart);
+                Storage.saveCart(Cart);
+                let button = this.getSingleButton(id);
+                if (button) {
+                    button.disabled = false;
+                    button.innerText = "Add to Cart";
+                }
+            }
+
+            getSingleButton(id) {
+                return buttonsDOM.find(button => button.dataset.id === id);
+            }
+        }
+
+        class Storage {
+            static saveProducts(products) {
+                localStorage.setItem("products", JSON.stringify(products));
+            }
+            static getStorageProducts(id) {
+                let products = JSON.parse(localStorage.getItem('products'));
+                return products.find((item) => item.sys.id === id);
+            }
+            static saveCart(cart) {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            static getCart() {
+                return localStorage.getItem('cart') ? JSON.parse(localStorage.getItem("cart")) : [];
+            }
+        }
+        
+        // This function needs to be outside the class to be called by the event listener
+        function clearCart() {
+            let cartItemsIds = Cart.map((item) => item.sys.id);
+            cartItemsIds.forEach((id) => {
+                Cart = Cart.filter((item) => item.sys.id !== id);
+                const button = buttonsDOM.find(btn => btn.dataset.id === id);
+                if (button) {
+                    button.disabled = false;
+                    button.innerText = "Add to Cart";
+                }
+            });
+            while (cartContent.firstChild) {
+                cartContent.removeChild(cartContent.firstChild);
+            }
+            const ui = new UI();
+            ui.setCartValues(Cart);
+            Storage.saveCart(Cart);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const products = new Product();
+            const ui = new UI();
+            ui.setupApp();
+            products.getProducts()
+                .then(products => {
+                    ui.displayProducts(products);
+                    Storage.saveProducts(products);
+                })
+                .then(() => {
+                    ui.getButtons();
+                });
+        });
+    </script>
+</body>
+</html>
